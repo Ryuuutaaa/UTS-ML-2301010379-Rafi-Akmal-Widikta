@@ -39,12 +39,21 @@ Proyek Ujian Tengah Semester mata kuliah Machine Learning, dikerjakan mengikuti 
 | Keterangan | Isi |
 | --- | --- |
 | Judul | Online Shoppers Purchasing Intention Dataset |
-| Sumber (Kaggle) | https://www.kaggle.com/datasets/henrysue/online-shoppers-intention |
-| Sumber asli | UCI Machine Learning Repository, dataset ID 468 |
+| Sumber (Kaggle) | https://www.kaggle.com/datasets/satyajeetkumarraj/online-shoppers-purchasing-intention-dataset |
+| Sumber asli (otoritatif) | UCI Machine Learning Repository, dataset ID 468 — https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset |
 | Tanggal akses | 24 November 2026 |
-| Lisensi | **CC BY 4.0** — boleh dipakai dan disebarkan dengan atribusi |
+| Lisensi | **CC BY 4.0** (Creative Commons Attribution 4.0 International) |
+| DOI dataset | 10.24432/C5F88Q |
 | Ukuran | 12.330 baris × 18 kolom (17 fitur + 1 target) |
 | Berkas lokal | `data/online_shoppers_intention.csv` |
+
+**Catatan verifikasi lisensi.** Lisensi **CC BY 4.0** dipastikan langsung pada halaman resmi UCI (sumber
+asli dataset), yang menyatakan: *"This dataset is licensed under a Creative Commons Attribution 4.0
+International (CC BY 4.0) license."* Tautan Kaggle yang dipakai di atas juga mencantumkan
+*"Attribution 4.0 International (CC BY 4.0)"* secara eksplisit dan berkasnya **identik** dengan versi UCI
+(diverifikasi dengan pencocokan hash). Sebagian unggahan ulang dataset ini di Kaggle hanya memberi label
+lisensi "Other (specified in description)", sehingga sengaja tidak dipakai sebagai rujukan utama.
+
 
 **Atribusi (wajib menurut lisensi CC BY 4.0):**
 
