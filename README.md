@@ -7,32 +7,35 @@ Proyek Ujian Tengah Semester mata kuliah Machine Learning, dikerjakan mengikuti 
 
 | | |
 | --- | --- |
-| **NIM** | `[ISI NIM]` |
-| **Nama** | `[ISI NAMA]` |
-| **Kelas** | `[ISI KELAS]` |
+| **NIM** | 2301010379 |
+| **Nama** | Rafi Akmal Widikta |
+| **Kelas** | Informatika XX |
 | **Mata Kuliah** | Machine Learning |
 | **Dosen** | Dr. I Gede Totok Suryawan, S.Kom., M.T. |
 
-> **Sebelum mengumpulkan:** ganti `SEED` pada sel ke-2 notebook menjadi **tiga digit terakhir NIM**,
-> lalu jalankan ulang seluruh notebook (**Runtime → Run all**). Ganti juga `[ISI NIM]`, `[ISI NAMA]`,
-> dan `[ISI KELAS]` di atas serta pada judul notebook dan nama berkasnya
-> (`notebook/UTS_ML_NIM_Nama.ipynb`).
+> **`SEED = 379`** adalah tiga digit terakhir NIM (2301010379) dan dipakai di seluruh proses: pembagian
+> data latih–uji, 5-fold cross-validation, dan model SVM. Notebook sudah dijalankan penuh (**Run All**)
+> sehingga seluruh keluaran dan angka pada narasi konsisten dengan `SEED` tersebut.
 
 ## Ringkasan Hasil
 
 | Metrik | Baseline (DummyClassifier) | SVM final | Selisih |
 | --- | --- | --- | --- |
-| Akurasi data uji | 0,8435 | **0,8718** | +0,0283 |
-| Presisi kelas Membeli | 0,0000 | **0,5673** | +0,5673 |
-| Recall kelas Membeli | 0,0000 | **0,7618** | +0,7618 |
-| **F1 kelas Membeli** | **0,0000** | **0,6503** | **+0,6503** |
-| F1 cross-validation 5-fold | 0,0000 | 0,6574 ± 0,0084 | +0,6574 |
-| Overfitting (akurasi latih − uji) | +0,0002 | +0,0120 | seimbang |
-| AUC (kurva ROC) | 0,5000 | **0,9108** | +0,4108 |
+| Akurasi data uji | 0,8435 | **0,8685** | +0,0250 |
+| Presisi kelas Membeli | 0,0000 | **0,5611** | +0,5611 |
+| Recall kelas Membeli | 0,0000 | **0,7330** | +0,7330 |
+| **F1 kelas Membeli** | **0,0000** | **0,6356** | **+0,6356** |
+| F1 cross-validation 5-fold | 0,0000 | 0,6594 ± 0,0062 | +0,6594 |
+| Overfitting (akurasi latih − uji) | +0,0002 | +0,0090 | seimbang |
+| AUC (kurva ROC) | 0,5000 | **0,8982** | +0,3982 |
 
-**Confusion matrix SVM** (data uji, 2.441 sesi): TN = 1.837, FP = 222, FN = 91, TP = 291.
+**Confusion matrix SVM** (data uji, 2.441 sesi): TN = 1.840, FP = 219, FN = 102, TP = 280.
 
-**Model terpilih:** SVM kernel RBF, `C=10`, `gamma=0.01`, `class_weight='balanced'`.
+**Model terpilih:** SVM **kernel linear**, `C=1`, `class_weight='balanced'`, `random_state=SEED`.
+
+> Hasil tuning memilih **kernel linear** (F1 CV 0,6594) yang praktis setara dengan RBF (0,6589) —
+> selisih 0,0005, jauh di bawah simpangan baku antar-fold. Pilihan diterima apa adanya dari CV,
+> tanpa memaksakan kernel yang terdengar lebih canggih.
 
 ## Dataset
 
@@ -54,7 +57,6 @@ International (CC BY 4.0) license."* Tautan Kaggle yang dipakai di atas juga men
 (diverifikasi dengan pencocokan hash). Sebagian unggahan ulang dataset ini di Kaggle hanya memberi label
 lisensi "Other (specified in description)", sehingga sengaja tidak dipakai sebagai rujukan utama.
 
-
 **Atribusi (wajib menurut lisensi CC BY 4.0):**
 
 > Sakar, C.O., Polat, S.O., Katircioglu, M., & Kastro, Y. (2019). *Real-time prediction of online
@@ -73,13 +75,13 @@ mana pun. Tidak diperlukan anonimisasi tambahan.
 ## Struktur Repositori
 
 ```
-UTS-ML-NIM-Nama/
+UTS-ML-2301010379-Rafi-Akmal-Widikta/
 ├── README.md
 ├── requirements.txt
 ├── data/
 │   └── online_shoppers_intention.csv
 ├── notebook/
-│   └── UTS_ML_NIM_Nama.ipynb      # sudah dijalankan penuh (Run all)
+│   └── UTS_ML_2301010379_Rafi_Akmal_Widikta.ipynb   # sudah dijalankan penuh (Run All)
 ├── reports/
 │   ├── fig01_distribusi_target.png
 │   ├── fig02_distribusi_fitur.png
@@ -89,7 +91,8 @@ UTS-ML-NIM-Nama/
 │   ├── fig06_tuning_knn.png
 │   ├── fig07_tuning_svm.png
 │   ├── fig08_confusion_roc.png
-│   └── fig09_feature_importance.png
+│   ├── fig09_feature_importance.png
+│   └── slide_presentasi.md
 └── src/
     └── preprocessing.py           # transformer kustom (Winsorizer, IQRClipper)
 ```
@@ -100,7 +103,7 @@ UTS-ML-NIM-Nama/
 python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-jupyter lab notebook/UTS_ML_NIM_Nama.ipynb
+jupyter lab notebook/UTS_ML_2301010379_Rafi_Akmal_Widikta.ipynb
 ```
 
 Notebook mencari dataset pada `../data/online_shoppers_intention.csv` relatif terhadap folder
@@ -113,25 +116,25 @@ Notebook mencari dataset pada `../data/online_shoppers_intention.csv` relatif te
 | --- | --- | --- |
 | 1. Pemahaman masalah | Tujuan, pengguna, sumber data, deskripsi 18 kolom | Jalur A; kolom kode diperlakukan kategorikal, bukan numerik |
 | 2. EDA | 5 grafik + interpretasi tiap grafik | F1 sebagai metrik utama; `PageValues` & `Month` dipertahankan |
-| 3. Pra-pemrosesan | Duplikat, `June`→`Jun`, winsorizing 1–99%, scaling, one-hot | **Menolak IQR** karena merusak model (F1 0,588 → 0,015) |
-| 4. Pemodelan | Baseline, tuning KNN (9 nilai k), tuning SVM (48 kombinasi), Naive Bayes | SVM RBF + `class_weight='balanced'` |
-| 5. Evaluasi | Confusion matrix, presisi/recall/F1, perhitungan manual, ROC | Tidak ada overfitting (selisih latih−uji +0,0120) |
+| 3. Pra-pemrosesan | Duplikat, `June`→`Jun`, winsorizing 1–99%, scaling, one-hot | **Menolak IQR** karena merusak model (F1 0,596 → 0,009) |
+| 4. Pemodelan | Baseline, tuning KNN (9 nilai k), tuning SVM (48 kombinasi), Naive Bayes | SVM linear + `class_weight='balanced'` |
+| 5. Evaluasi | Confusion matrix, presisi/recall/F1, perhitungan manual, ROC | Tidak ada overfitting (selisih latih−uji +0,0090) |
 | 6. Kesimpulan | Kelayakan, rekomendasi, keterbatasan, saran perbaikan | Model layak dipakai, dengan 6 keterbatasan tercatat |
 
 ## Temuan Penting (bahan presentasi)
 
-1. **IQR merusak model.** Pemotongan outlier dengan aturan IQR menurunkan F1 dari **0,588 menjadi
-   0,015**, karena `PageValues` memiliki Q1 = Q3 = 0 sehingga semua nilai bukan-nolnya terpangkas
-   menjadi nol. Solusi yang dipakai: winsorizing persentil 1–99 (F1 **0,596**).
+1. **IQR merusak model.** Pemotongan outlier dengan aturan IQR menurunkan F1 dari **0,596 menjadi
+   0,009**, karena `PageValues` memiliki Q1 = Q3 = 0 sehingga semua nilai bukan-nolnya terpangkas
+   menjadi nol. Solusi yang dipakai: winsorizing persentil 1–99 (**F1 0,6085**).
 2. **Akurasi menyesatkan.** Baseline yang selalu menebak "Tidak Membeli" mendapat akurasi **84,35%**
    tetapi F1 **0,0000**. Karena itu seluruh pemilihan model memakai F1.
-3. **`class_weight='balanced'` adalah kunci.** Recall naik **+23,04 poin** dengan biaya presisi
-   −16,03 poin dan akurasi −2,38 poin; F1 bersihnya naik **+3,61 poin**.
-4. **RBF dan linear hampir setara.** F1 CV 0,6574 vs 0,6569 — selisih 0,0005, jauh di bawah simpangan
-   baku antar-fold (0,008). Pemilihan RBF diakui **tidak signifikan secara statistik**.
-5. **Kategori langka membuat bobot tidak stabil.** `TrafficType=16` berbobot tertinggi (+1,94) tetapi
+3. **`class_weight='balanced'` adalah kunci.** Recall naik **+22,8 poin** dengan biaya presisi
+   −12,8 poin dan akurasi −1,8 poin; F1 bersihnya naik **+5,3 poin**.
+4. **Linear dan RBF setara.** F1 CV 0,6594 vs 0,6589 — selisih 0,0005, jauh di bawah simpangan baku
+   antar-fold (0,006–0,010). Pemenang menurut CV adalah **linear**, dan itu diterima apa adanya.
+5. **Kategori langka membuat bobot tidak stabil.** `TrafficType=16` berbobot tertinggi (+2,05) tetapi
    hanya muncul pada **3 baris**. Karena itu rekomendasi bisnis tidak didasarkan pada kolom kode.
-6. **Naive Bayes salah model, bukan bug.** Akurasi uji hanya 0,2614 karena 65 dari 75 fitur hasil
+6. **Naive Bayes salah model, bukan bug.** Akurasi uji hanya 0,2589 karena 65 dari 75 fitur hasil
    one-hot bersifat biner, sehingga asumsi distribusi Gaussian dilanggar.
 
 ## Pernyataan Penggunaan AI
@@ -157,7 +160,7 @@ Sesuai ketentuan soal poin 8, berikut pernyataan jujur mengenai penggunaan asist
    matrix, lalu dibandingkan dengan keluaran `classification_report`. Hasilnya cocok hingga selisih
    pembulatan.
 3. **Keputusan teknis kunci diuji sendiri, bukan diterima begitu saja.** Contoh paling penting: saran
-   pemotongan outlier dengan IQR diuji dan hasilnya **merusak model** (F1 0,588 → 0,015) karena
+   pemotongan outlier dengan IQR diuji dan hasilnya **merusak model** (F1 0,596 → 0,009) karena
    `PageValues` memiliki IQR = 0. Penggantinya winsorizing persentil 1–99, dan buktinya dilaporkan
    pada Tahap 3.
 4. **Setiap parameter dipahami maknanya**: `C` mengatur toleransi margin, `gamma` mengatur jangkauan
@@ -179,7 +182,7 @@ Saya siap menjelaskan dan mengubah bagian mana pun dari kode ini saat presentasi
 3. Data bersifat historis satu tahun dan tidak memuat harga, stok, atau kampanye iklan.
 4. `ExitRates`–`BounceRates` berkorelasi 0,913 dan `ProductRelated`–`ProductRelated_Duration` 0,861,
    sehingga interpretasi bobot tidak sepenuhnya bersih.
-5. Recall 0,7618 berarti **23,8% pembeli tetap terlewat**.
+5. Recall 0,7330 berarti **26,7% pembeli tetap terlewat**.
 6. Naive Bayes tidak layak dipakai karena asumsi distribusi Gaussian dilanggar oleh 65 fitur biner.
 
 ## Saran Perbaikan
@@ -189,11 +192,11 @@ Saya siap menjelaskan dan mengubah bagian mana pun dari kode ini saat presentasi
 2. Rekayasa fitur: `ProductRelated_Duration / ProductRelated` (detik per halaman produk).
 3. Gabungkan kategori langka pada `TrafficType` dan `Browser` (mis. semua kategori < 50 baris menjadi
    "Lainnya") agar koefisien stabil.
-4. Coba model berbasis pohon. Random Forest sudah diuji: F1 CV **0,6782** (lebih tinggi dari SVM
-   0,6574), tetapi akurasi latih **0,9997** vs uji 0,8943 — **overfit ekstrem**, belum layak dipilih
+4. Coba model berbasis pohon. Random Forest sudah diuji: F1 CV **0,6861** (lebih tinggi dari SVM
+   0,6594), tetapi akurasi latih **0,9994** vs uji 0,8873 — **overfit ekstrem**, belum layak dipilih
    tanpa penyetelan kedalaman.
 5. Validasi lebih ketat dengan `RepeatedStratifiedKFold` (5-fold × 3 pengulangan).
-6. Kalibrasi probabilitas dengan `CalibratedClassifierCV` agar `predict_proba` dapat dipercaya sebagai
-   peluang sesungguhnya.
+6. Kalibrasi probabilitas dengan `CalibratedClassifierCV` agar skor `decision_function` dapat dibaca
+   sebagai peluang sesungguhnya — SVM tidak menyediakan `predict_proba` secara bawaan.
 7. Untuk Naive Bayes, gunakan `BernoulliNB` atau `CategoricalNB` yang memang dirancang untuk fitur
    biner/kategorikal.

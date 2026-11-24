@@ -25,7 +25,7 @@ Angka yang wajib disebut:
 
 | Fakta | Angka |
 | --- | --- |
-| Ketidakseimbangan kelas | 84,5% tidak membeli : 15,5% membeli (**5,46 : 1**) |
+| Ketidakseimbangan kelas | 84,4% tidak membeli : 15,6% membeli (**5,46 : 1**) |
 | Missing value | **0** |
 | Duplikat | **125 baris** (dihapus) |
 | Kategori tidak konsisten | `'June'` vs `'Jun'` (**288 baris**) → diseragamkan |
@@ -50,16 +50,16 @@ Angka yang wajib disebut:
 
 | Strategi outlier | CV-F1 |
 | --- | --- |
-| Tanpa penanganan | 0,5876 |
-| **IQR clip 1,5×** | **0,0152** ← model rusak |
-| **Winsorizer 1–99%** | **0,5960** ← dipilih |
+| Tanpa penanganan | 0,5959 |
+| **IQR clip 1,5×** | **0,0090** ← model rusak |
+| **Winsorizer 1–99%** | **0,6085** ← dipilih |
 
 Alasannya: `PageValues` punya Q1 = Q3 = 0, sehingga batas IQR = 0 dan **semua nilai bukan-nol
-terpangkas**. Padahal `PageValues` adalah fitur terkuat (rata-rata 27,26 pada pembeli vs 1,98 pada
+terpangkas**. Padahal `PageValues` adalah fitur terkuat (rata-rata 27,27 pada pembeli vs 2,00 pada
 bukan pembeli).
 
 > Kalimat kunci: "Saya **tidak mengikuti** anjuran IQR begitu saja — saya ujinya, hasilnya F1 jatuh dari
-> 0,588 ke 0,015, jadi saya ganti dengan winsorizing."
+> 0,596 ke 0,009, jadi saya ganti dengan winsorizing."
 
 ---
 
@@ -70,14 +70,15 @@ Semua tuning memakai **5-fold StratifiedKFold pada data latih saja**.
 | Model | F1 CV |
 | --- | --- |
 | DummyClassifier (baseline) | **0,0000** |
-| Naive Bayes | 0,2939 |
-| KNN (k=3, terbaik dari 9 nilai) | 0,5280 |
-| **SVM RBF, C=10, gamma=0.01, balanced** | **0,6574** |
+| Naive Bayes | 0,2934 |
+| KNN (k=5, terbaik dari 9 nilai) | 0,5210 |
+| **SVM linear, C=1, balanced** | **0,6594** |
 
 Dua hal yang jujur harus disebut:
 
-1. **RBF vs linear hampir setara** (0,6574 vs 0,6569) — selisih 0,0005, di bawah simpangan baku 0,008.
-2. **`class_weight='balanced'` menaikkan F1 sebesar 0,040** — seluruh 10 konfigurasi teratas memakainya.
+1. **Linear vs RBF setara** (0,6594 vs 0,6589) — selisih 0,0005, di bawah simpangan baku 0,006–0,010.
+   Pemenang menurut CV adalah **linear**, dan itu diterima apa adanya.
+2. **`class_weight='balanced'` menaikkan F1 sebesar 0,035** — seluruh konfigurasi teratas memakainya.
 
 ---
 
@@ -87,25 +88,25 @@ Dua hal yang jujur harus disebut:
 
 |  | Prediksi Tidak | Prediksi Membeli |
 | --- | --- | --- |
-| **Aktual Tidak** | TN = 1.837 | FP = 222 |
-| **Aktual Membeli** | FN = 91 | TP = 291 |
+| **Aktual Tidak** | TN = 1.840 | FP = 219 |
+| **Aktual Membeli** | FN = 102 | TP = 280 |
 
 **Perhitungan manual yang harus bisa diucapkan:**
 
-- Presisi = 291 / (291+222) = 291/513 = **0,5673**
-- Recall = 291 / (291+91) = 291/382 = **0,7618**
-- F1 = 2(291) / (2·291 + 222 + 91) = 582/895 = **0,6503**
-- Akurasi = (291+1837)/2441 = **0,8718**
+- Presisi = 280 / (280+219) = 280/499 = **0,5611**
+- Recall = 280 / (280+102) = 280/382 = **0,7330**
+- F1 = 2(280) / (2·280 + 219 + 102) = 560/881 = **0,6356**
+- Akurasi = (280+1840)/2441 = **0,8685**
 
 **Uji overfitting:**
 
 | Model | Akurasi latih | Akurasi uji | Selisih |
 | --- | --- | --- | --- |
-| KNN (k=3) | 0,9217 | 0,8632 | **+0,0585** ← overfit |
-| **SVM** | 0,8838 | 0,8718 | **+0,0120** ← sehat |
+| KNN (k=5) | 0,9080 | 0,8656 | **+0,0424** ← overfit |
+| **SVM** | 0,8775 | 0,8685 | **+0,0090** ← sehat |
 
-> Kalimat kunci: "Recall 0,7618 artinya **3 dari 4 pembeli tertangkap**; presisi 0,5673 artinya
-> **2 dari 5 penerima voucher tidak jadi membeli**."
+> Kalimat kunci: "Recall 0,7330 artinya **hampir 3 dari 4 pembeli tertangkap**; presisi 0,5611 artinya
+> **hampir separuh penerima voucher tidak jadi membeli**."
 
 ---
 
@@ -113,12 +114,12 @@ Dua hal yang jujur harus disebut:
 
 **Layak dipakai**, dua alasan berangka:
 
-1. F1 naik dari **0,0000 → 0,6503** (+0,6503)
-2. Selisih latih–uji hanya **+0,0120** (KNN +0,0585)
+1. F1 naik dari **0,0000 → 0,6356** (+0,6356)
+2. Selisih latih–uji hanya **+0,0090** (KNN +0,0424)
 
 **Rekomendasi:**
 
-1. Pakai **peringkat skor**, bukan label biner (AUC = 0,9108)
+1. Pakai **peringkat skor**, bukan label biner (AUC = 0,8982)
 2. Geser anggaran promo ke **November–Desember** (konversi 25,4% vs 1,6% Februari)
 3. **Jangan** bertindak atas kolom kode — `TrafficType=16` berbobot tertinggi tapi hanya **3 baris**
 
@@ -138,19 +139,19 @@ Data dibagi **sebelum** scaler dibuat, dan semua pra-pemrosesan ada di dalam `Pi
 `fit` hanya menyentuh data latih. Data uji dibuka sekali di Tahap 5.
 
 **"Coba ganti k jadi 15, apa yang terjadi?"**
-F1 CV turun dari 0,5280 (k=3) ke 0,5053 (k=15), karena semakin banyak tetangga mayoritas ikut memilih
+F1 CV turun dari 0,5210 (k=5) ke 0,5151 (k=15), karena semakin banyak tetangga mayoritas ikut memilih
 sehingga model makin jarang memprediksi "Membeli".
 
 **"Coba naikkan C jadi 100?"**
-Pada RBF F1 CV turun dari 0,6574 (C=10) menjadi 0,6538 (C=100) dengan `balanced`. C terlalu besar
-membuat margin terlalu sempit sehingga model lebih mudah overfit.
+Pada kernel linear F1 CV nyaris tidak berubah (0,6594 pada C=1 vs 0,6577 pada C=100). C terlalu besar
+membuat margin terlalu sempit sehingga model lebih mudah overfit, tanpa manfaat yang sepadan.
 
 **"Kenapa `class_weight='balanced'` bikin akurasi turun tapi F1 naik?"**
-Karena model jadi lebih berani memprediksi "Membeli": recall naik 23,04 poin sementara presisi turun
-16,03 poin. Kenaikan recall lebih besar, sehingga F1 bersihnya naik 3,61 poin.
+Karena model jadi lebih berani memprediksi "Membeli": recall naik 22,8 poin sementara presisi turun
+12,8 poin. Kenaikan recall lebih besar, sehingga F1 bersihnya naik 5,3 poin.
 
 **"Kalau saya hapus `PageValues`, apa efeknya?"**
-F1 akan turun tajam karena `PageValues` adalah fitur terkuat (bobot +1,81; rata-rata 27,26 vs 1,98
+F1 akan turun tajam karena `PageValues` adalah fitur terkuat (bobot +1,82; rata-rata 27,27 vs 2,00
 antar kelas). Bisa diuji langsung di notebook dengan `drop(columns=["PageValues"])`.
 
 **"Kenapa Naive Bayes jelek sekali?"**
