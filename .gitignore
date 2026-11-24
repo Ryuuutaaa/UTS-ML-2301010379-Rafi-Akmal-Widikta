@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
+*.zip
+.commandcode/
+archive.md
+Soal_UTS_Machine_Learning_Kelas_XX (1).pdf
